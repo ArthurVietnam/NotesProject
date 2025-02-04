@@ -22,8 +22,10 @@ public class CreateNoteCommandHandler : IRequestHandler<CreateNoteCommand, Guid>
             CreationDate = DateTime.Now,
             EditDate = null
         };
+        
         await _dbContext.Notes.AddAsync(note, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
+        
         return note.Id;
     }
 }
