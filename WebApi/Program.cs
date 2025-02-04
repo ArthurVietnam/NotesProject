@@ -1,6 +1,36 @@
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+using Persistence;
 
-app.MapGet("/", () => "Hello World!");
+namespace WebApi;
 
-app.Run();
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        var host = CreateHostBuilder(args).Build();
+
+        using (var scope = host.Services.CreateScope())
+        {
+            var serviceProvider = scope.ServiceProvider;
+            try
+            {
+                var context = serviceProvider.GetRequiredService<NotesDbContext>();
+                DbInitializer.Initialize(context);
+            }
+            catch (Exception exception)
+            {
+                
+            }
+        }
+        
+        host.Run();
+    }
+
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
+}
