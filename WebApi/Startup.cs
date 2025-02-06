@@ -2,6 +2,7 @@
 using Aplication;
 using Persistence;
 using Persistence.Common.Mappings;
+using WebApi.Middleware;
 
 
 namespace WebApi;
@@ -45,6 +46,7 @@ public class Startup
             app.UseDeveloperExceptionPage();
         }
 
+        app.UseCustomExceptionHandler();
         app.UseRouting();
         app.UseHttpsRedirection();
         app.UseCors("AllowAll");
